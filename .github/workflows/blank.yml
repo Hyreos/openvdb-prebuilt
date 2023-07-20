@@ -26,7 +26,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           repository: 'https://github.com/oneapi-src/oneTBB.git'
-          submodules: 'recursive
+          submodules: 'recursive'
                     
       - uses: actions/checkout@v3
         with:
