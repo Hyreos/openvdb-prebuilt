@@ -86,7 +86,7 @@ jobs:
         working-directory: 'zlib/build'
       - run: 'cmake --build .'
         working-directory: 'zlib/build'
-      - run: 'cmake --install . --prefix=${{github.workspace}}/install -DCMAKE_BUILD_TYPE=Release'
+      - run: 'cmake --install . --prefix ${{github.workspace}}/install -DCMAKE_BUILD_TYPE=Release'
         working-directory: 'zlib/build'
         
       - run: 'cmake -G Ninja .. -DBoost_INCLUDE_DIR=${{ steps.install-boost.outputs.BOOST_ROOT }}/include -DZLIB_LIBRARY=${{github.workspace}}/install/lib/zlib.lib -DBoost_LIBRARY_DIR_RELEASE=${{ steps.install-boost.outputs.BOOST_ROOT }}/lib -DZLIB_INCLUDE_DIR=${{github.workspace}}/install/include -DCMAKE_BUILD_TYPE=Release -DBlosc_ROOT=${{github.workspace}}/install -DOPENVDB_USE_FUTURE_ABI_10=ON -DOPENVDB_BUILD_BINARIES=OFF -DTBB_ROOT=${{github.workspace}}/install'
