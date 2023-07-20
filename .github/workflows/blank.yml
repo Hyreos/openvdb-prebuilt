@@ -34,7 +34,9 @@ jobs:
           repository: 'Blosc/c-blosc'
           submodules: 'recursive'
           path: 'c-blosc'
-          
+      
+      - uses: seanmiddleditch/gha-setup-ninja@master
+      
       - run: |
               mkdir oneTBB/build
               mkdir c-blosc/build
@@ -48,14 +50,14 @@ jobs:
             toolset: msvc
             link: 'shared'
       
-      - run: 'cmake .. -DCMAKE_BUILD_TYPE=Release -DBoost_INCLUDE_DIR=${{ steps.install-boost.outputs.BOOST_ROOT }}/include -DBoost_LIBRARY_DIR_RELEASE=${{ steps.install-boost.outputs.BOOST_ROOT }}/lib'
+      - run: 'cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Release -DTBB_TEST=OFF -DBoost_INCLUDE_DIR=${{ steps.install-boost.outputs.BOOST_ROOT }}/include -DBoost_LIBRARY_DIR_RELEASE=${{ steps.install-boost.outputs.BOOST_ROOT }}/lib'
         working-directory: 'oneTBB/build'
       - run: 'cmake --build .'
         working-directory: 'oneTBB/build'
       - run: 'cmake --install . --prefix=${{github.workspace}}/install --config=Release'
         working-directory: 'oneTBB/build'
       
-      - run: 'cmake .. -DCMAKE_BUILD_TYPE=Release -DTBB_ROOT=${{github.workspace}}/install'
+      - run: 'cmake -G Ninja .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=OFF -DBUILD_FUZZERS=OFF -DBUILD_BENCHMARKS=OFF -DTBB_ROOT=${{github.workspace}}/install'
         working-directory: 'c-blosc/build'
       - run: 'cmake --build .'
         working-directory: 'c-blosc/build'
