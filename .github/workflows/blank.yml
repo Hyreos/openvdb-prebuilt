@@ -25,12 +25,12 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
         with:
-          repository: 'https://github.com/oneapi-src/oneTBB.git'
+          repository: 'https://github.com/oneapi-src/oneTBB'
           submodules: 'recursive'
                     
       - uses: actions/checkout@v3
         with:
-          repository: 'https://github.com/Blosc/c-blosc.git'
+          repository: 'https://github.com/Blosc/c-blosc'
           submodules: 'recursive'
       - run: |
               mkdir oneTBB/build
