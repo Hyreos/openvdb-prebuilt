@@ -1,0 +1,68 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: windows
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:    
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+        with:
+          repository: 'https://github.com/oneapi-src/oneTBB.git'
+          ref: 'v2021.9.0'
+          path: 'tbb'
+          submodules: 'recursive'
+                    
+      - uses: actions/checkout@v3
+        with:
+          repository: 'https://github.com/Blosc/c-blosc.git'
+          ref: 'v1.21.4'
+          path: 'blosc'
+          submodules: 'recursive'
+      - run: |
+              'mkdir tbb/build'
+              'mkdir blosc/build'
+              'mkdir install'
+      - name: Install boost
+        uses: MarkusJx/install-boost@v2.4.1
+        id: install-boost
+        with:
+            boost_version: 1.80.1
+            platform_version: 2019
+            toolset: msvc
+      
+      - run: 'cmake .. -DCMAKE_BUILD_TYPE=Release -DBoost_INCLUDE_DIR=${{ steps.install-boost.outputs.BOOST_ROOT }}/include -DBoost_LIBRARY_DIR_RELEASE=${{ steps.install-boost.outputs.BOOST_ROOT }}/lib'
+        working-directory: 'tbb/build'
+      - run: 'cmake --build .'
+        working-directory: 'tbb/build'
+      - run: 'cmake --install . --prefix=${{github.workspace}}/install --config=Release'
+        working-directory: 'tbb/build'
+      
+      - run: 'cmake .. -DCMAKE_BUILD_TYPE=Release -DTBB_ROOT=${{github.workspace}}/install'
+        working-directory: 'blosc/build'
+      - run: 'cmake --build .'
+        working-directory: 'blosc/build'
+      - run: 'cmake --install . --prefix=${{github.workspace}}/install --config=Release'
+        working-directory: 'blosc/build'
+        
+      - uses: actions/upload-artifact@v3
+        with:
+          name: PrebuiltCMakeFiles
+          path: install
