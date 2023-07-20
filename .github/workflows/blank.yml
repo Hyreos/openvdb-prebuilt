@@ -27,11 +27,14 @@ jobs:
         with:
           repository: 'oneapi-src/oneTBB'
           submodules: 'recursive'
+          path: 'oneTBB'
                     
       - uses: actions/checkout@v3
         with:
           repository: 'Blosc/c-blosc'
           submodules: 'recursive'
+          path: 'c-blosc'
+          
       - run: |
               mkdir oneTBB/build
               mkdir c-blosc/build
@@ -43,6 +46,7 @@ jobs:
             boost_version: 1.80.0
             platform_version: 2019
             toolset: msvc
+            link: 'shared'
       
       - run: 'cmake .. -DCMAKE_BUILD_TYPE=Release -DBoost_INCLUDE_DIR=${{ steps.install-boost.outputs.BOOST_ROOT }}/include -DBoost_LIBRARY_DIR_RELEASE=${{ steps.install-boost.outputs.BOOST_ROOT }}/lib'
         working-directory: 'oneTBB/build'
