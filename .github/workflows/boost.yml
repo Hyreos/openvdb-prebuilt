@@ -41,14 +41,23 @@ jobs:
             boost_version: 1.81.0
             platform_version: 11.0
             boost_install_dir: ${{ github.workspace }}/boost-x86
-            arch: 'x86'
-            link: 'shared+static'
+            arch: x86
+            link: shared+static
             toolset: clang
-
-      - run: 'sh build_boost_universal.sh ${{ steps.install-aarch64-boost.BOOST_ROOT }} ${{ steps.install-x86-boost.BOOST_ROOT }}'
+      
+      - run: mkdir boost-universal-libraries
+      
+      - run: mkdir -p boost-universal-libraries/arm64 && cp ${{ steps.install-aarch64-boost.BOOST_ROOT }}/lib/*.dylib boost-universal-libraries/arm64
+      - run: cp ${{ steps.install-aarch64-boost.BOOST_ROOT }}/lib/*.a boost-universal-libraries/arm64
+      
+      - run: mkdir -p boost-universal-libraries/x86_64 && cp ${{ steps.install-x86-boost.BOOST_ROOT }}/lib/*.dylib boost-universal-libraries/x86_64
+      - run: cp ${{ steps.install-x86-boost.BOOST_ROOT }}/lib/*.a boost-universal-libraries/x86_64
+      
+      - run: sh ${{ github.workspace }}/build_boost_universal.sh
+        working-directory: boost-universal-libraries
       
       - uses: actions/upload-artifact@v3
         with:
           name: boost-1.81.0-macos-universal-binaries
-          path: boost-universal-libraries
+          path: boost-universal-libraries/universal
       
