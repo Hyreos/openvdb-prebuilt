@@ -1,0 +1,73 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: macos-11
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:    
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+        with:
+          repository: 'oneapi-src/oneTBB'
+          submodules: 'recursive'
+          path: 'oneTBB'
+                    
+      - uses: actions/checkout@v3
+        with:
+          repository: 'Blosc/c-blosc'
+          submodules: 'recursive'
+          path: 'c-blosc'
+      
+      - uses: actions/checkout@v3
+        with:
+          repository: 'AcademySoftwareFoundation/openvdb'
+          submodules: 'recursive'
+          path: 'openvdb'
+          ref: 'v10.0.1'
+          
+      - uses: actions/checkout@v3
+        with:
+          repository: 'madler/zlib'
+          submodules: 'recursive'
+          path: 'zlib'
+          ref: 'v1.2.13'
+      
+      - uses: seanmiddleditch/gha-setup-ninja@master
+      
+      - run: |
+              mkdir oneTBB/build
+              mkdir c-blosc/build
+              mkdir openvdb/build
+              mkdir zlib/build
+              mkdir install
+              
+      - name: Install boost
+        uses: MarkusJx/install-boost@v2.4.1
+        id: install-boost
+        with:
+            boost_version: 1.80.0
+            platform_version: 2019
+            toolset: clang
+            link: 'shared'
+            
+      - run: 'ls ${{ steps.install-boost.outputs.BOOST_ROOT }}'
+      
+      - run: 'sh ${{github.workspace}}/build_boost_universal.sh'
+        working-directory: '${{ steps.install-boost.outputs.BOOST_ROOT }}'
+      
+      - uses: actions/upload-artifact@v3
+        with:
+          name: boost-macos-x86_64-binaries
+          path: ${{ steps.install-boost.outputs.BOOST_ROOT }}
+      
