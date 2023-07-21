@@ -32,6 +32,8 @@ jobs:
             link: shared
             
       - run: 'ls ${{ steps.install-boost.outputs.BOOST_ROOT }}'
+      - run: 'ls boost'
+      - run: 'ls ${{ steps.install-boost.outputs.BOOST_ROOT }}/boost'
       
       - run: 'sh build_boost_universal.sh'
       
