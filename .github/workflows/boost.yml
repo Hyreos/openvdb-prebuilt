@@ -20,26 +20,19 @@ jobs:
       - uses: actions/checkout@v3
       
       - uses: seanmiddleditch/gha-setup-ninja@master
-              
-      - name: Install boost
-        uses: MarkusJx/install-boost@v2.4.1
-        id: install-boost
+      
+      - uses: actions/checkout@v3
         with:
-            boost_version: 1.80.0
-            platform: macos
-            platform_version: 11
-            toolset: clang
-            link: shared
-            
-      - run: 'ls ${{ steps.install-boost.outputs.BOOST_ROOT }}'
-      - run: 'ls boost'
-      - run: 'ls ${{ steps.install-boost.outputs.BOOST_ROOT }}/boost'
+          repository: 'boostorg/boost'
+          submodules: 'recursive'
+          ref: 'boost-1.82.0'
+          path: 'boost'
       
       - run: 'sh ${{ github.workspace }}/build_boost_universal.sh'
-        working-directory: ${{ steps.install-boost.outputs.BOOST_ROOT }}
+        working-directory: boost/
       
       - uses: actions/upload-artifact@v3
         with:
-          name: boost-macos-x86_64-binaries
-          path: ${{ steps.install-boost.outputs.BOOST_ROOT }}
+          name: boost-1.82.0-macos-x86_64-binaries
+          path: boost/
       
