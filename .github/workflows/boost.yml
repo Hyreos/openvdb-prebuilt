@@ -25,25 +25,25 @@ jobs:
       
       - name: Install boost
         uses: MarkusJx/install-boost@v2.4.1
-        id: install-aarch64-boost
-        with:
-            boost_version: 1.80.0
-            platform_version: 11
-            boost_install_dir: ${{ github.workspace }}/boost-aarch64
-            arch: aarch64
-            link: shared
-            toolset: clang
-    
-      - name: Install boost
-        uses: MarkusJx/install-boost@v2.4.1
         id: install-x86-boost
         with:
             boost_version: 1.80.0
             platform_version: 11
-            boost_install_dir: ${{ github.workspace }}/boost-x86
-            arch: x86
-            link: shared
-            toolset: clang
+            boost_install_dir: '${{ github.workspace }}/boost-x86'
+            arch: 'x86'
+            link: 'shared'
+            toolset: 'clang'
+      
+      - name: Install boost
+        uses: MarkusJx/install-boost@v2.4.1
+        id: install-aarch64-boost
+        with:
+            boost_version: 1.80.0
+            platform_version: 11
+            boost_install_dir: '${{ github.workspace }}/boost-aarch64'
+            arch: 'aarch64'
+            link: 'shared'
+            toolset: 'clang'
       
       - run: mkdir boost-universal-libraries
       
