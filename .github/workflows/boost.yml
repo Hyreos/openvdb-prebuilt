@@ -57,9 +57,10 @@ jobs:
         id: install-boost
         with:
             boost_version: 1.80.0
-            platform_version: 2019
+            platform: macos
+            platform_version: 11
             toolset: clang
-            link: 'shared'
+            link: shared
             
       - run: 'ls ${{ steps.install-boost.outputs.BOOST_ROOT }}'
       
