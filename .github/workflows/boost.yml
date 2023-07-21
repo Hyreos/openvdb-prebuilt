@@ -30,8 +30,8 @@ jobs:
             boost_version: 1.81.0
             platform_version: 11.0
             boost_install_dir: ${{ github.workspace }}/boost-aarch64
-            arch: 'aarch64'
-            link: 'shared+static'
+            arch: aarch64
+            link: static+shared
             toolset: clang
     
       - name: Install boost
@@ -42,7 +42,7 @@ jobs:
             platform_version: 11.0
             boost_install_dir: ${{ github.workspace }}/boost-x86
             arch: x86
-            link: shared+static
+            link: static+shared
             toolset: clang
       
       - run: mkdir boost-universal-libraries
