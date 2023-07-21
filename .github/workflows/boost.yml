@@ -23,18 +23,32 @@ jobs:
       
       - uses: seanmiddleditch/gha-setup-ninja@master
       
-      - uses: actions/checkout@v3
+      - name: Install boost
+        uses: MarkusJx/install-boost@v2.4.1
+        id: install-aarch64-boost
         with:
-          repository: 'boostorg/boost'
-          submodules: 'recursive'
-          ref: 'boost-1.82.0'
-          path: 'boost'
-      
-      - run: 'sh ${{ github.workspace }}/build_boost_universal.sh'
-        working-directory: boost/
+            boost_version: 1.81.0
+            platform_version: 11.0
+            boost_install_dir: ${{ github.workspace }}/boost-aarch64
+            arch: 'aarch64'
+            link: 'shared+static'
+            toolset: clang
+    
+      - name: Install boost
+        uses: MarkusJx/install-boost@v2.4.1
+        id: install-x86-boost
+        with:
+            boost_version: 1.81.0
+            platform_version: 11.0
+            boost_install_dir: ${{ github.workspace }}/boost-x86
+            arch: 'aarch64'
+            link: 'shared+static'
+            toolset: clang
+
+      - run: 'sh build_boost_universal.sh ${{ steps.install-aarch64-boost.BOOST_ROOT }} ${{ steps.install-x86-boost.BOOST_ROOT }}'
       
       - uses: actions/upload-artifact@v3
         with:
-          name: boost-1.82.0-macos-x86_64-binaries
+          name: boost-1.82.0-macos-universal-binaries
           path: boost/
       
