@@ -35,7 +35,8 @@ jobs:
       - run: 'ls boost'
       - run: 'ls ${{ steps.install-boost.outputs.BOOST_ROOT }}/boost'
       
-      - run: 'sh build_boost_universal.sh'
+      - run: 'sh ${{ github.workspace }}/build_boost_universal.sh'
+        working-directory: ${{ steps.install-boost.outputs.BOOST_ROOT }}
       
       - uses: actions/upload-artifact@v3
         with:
