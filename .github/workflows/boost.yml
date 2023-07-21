@@ -18,39 +18,8 @@ jobs:
     steps:    
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-        with:
-          repository: 'oneapi-src/oneTBB'
-          submodules: 'recursive'
-          path: 'oneTBB'
-                    
-      - uses: actions/checkout@v3
-        with:
-          repository: 'Blosc/c-blosc'
-          submodules: 'recursive'
-          path: 'c-blosc'
-      
-      - uses: actions/checkout@v3
-        with:
-          repository: 'AcademySoftwareFoundation/openvdb'
-          submodules: 'recursive'
-          path: 'openvdb'
-          ref: 'v10.0.1'
-          
-      - uses: actions/checkout@v3
-        with:
-          repository: 'madler/zlib'
-          submodules: 'recursive'
-          path: 'zlib'
-          ref: 'v1.2.13'
       
       - uses: seanmiddleditch/gha-setup-ninja@master
-      
-      - run: |
-              mkdir oneTBB/build
-              mkdir c-blosc/build
-              mkdir openvdb/build
-              mkdir zlib/build
-              mkdir install
               
       - name: Install boost
         uses: MarkusJx/install-boost@v2.4.1
