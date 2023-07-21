@@ -27,8 +27,9 @@ jobs:
         uses: MarkusJx/install-boost@v2.4.1
         id: install-aarch64-boost
         with:
-            boost_version: 1.80.0
-            platform_version: 11.0
+            boost_version: 1.81.0
+            platform: macos
+            platform_version: 11
             boost_install_dir: ${{ github.workspace }}/boost-aarch64
             arch: aarch64
             link: shared
@@ -38,8 +39,9 @@ jobs:
         uses: MarkusJx/install-boost@v2.4.1
         id: install-x86-boost
         with:
-            boost_version: 1.80.0
-            platform_version: 11.0
+            boost_version: 1.81.0
+            platform: macos
+            platform_version: 11
             boost_install_dir: ${{ github.workspace }}/boost-x86
             arch: x86
             link: shared
@@ -58,6 +60,6 @@ jobs:
       
       - uses: actions/upload-artifact@v3
         with:
-          name: boost-1.80.0-macos-universal-binaries
+          name: boost-1.81.0-macos-universal-binaries
           path: boost-universal-libraries/universal
       
